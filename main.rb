@@ -1,5 +1,7 @@
 require "rubygems"
 require "gosu"
+require "daemon"
+
 
 class GameWindow < Gosu::Window
   
@@ -18,6 +20,12 @@ class GameWindow < Gosu::Window
     
     @player_x = 400
     @player_y = 300
+    
+    Daemon.image = Gosu::Image.new self, "media/images/daemon.png", true
+    
+    @daemon = Daemon.new
+    @daemon.x = 320
+    @daemon.y = 240
   end
   
   
@@ -40,6 +48,7 @@ class GameWindow < Gosu::Window
       @player_y += BLIT_SPEED
     end
 
+    @daemon.update
   end
   
   
@@ -49,12 +58,17 @@ class GameWindow < Gosu::Window
         @grid.draw x * 32, y * 32 + @scroll_offset, 0
       end
     end
-    (1..20).each do |y|
-      @wall1.draw 64, y * 32, 0
-      @wall1.draw 576, y * 32, 0
-    end
+    # (1..20).each do |y|
+    #   @wall1.draw 64, y * 32, 0
+    #   @wall1.draw 576, y * 32, 0
+    # end
     
     @blit.draw @player_x, @player_y, 1
+    
+    #daemon test
+    # @daemon.draw 320, 200, 1, 1.0, 1.0, 0xffffffff
+    # @daemon.draw 320, 240, 1, 1.0, 1.0, 0x7fffffff
+    @daemon.draw
   end
   
   def button_down(key_id)
