@@ -8,6 +8,8 @@ class GameWindow < Gosu::Window
   SCREEN_X = 640
   SCREEN_Y = 480
   BLIT_SPEED = 3
+  CHASE_INTERVAL = 20
+  
   
   def initialize
     super SCREEN_X, SCREEN_Y, false
@@ -25,15 +27,21 @@ class GameWindow < Gosu::Window
     @player.y = 300
     
     # Daemon
-    Daemon.image = Gosu::Image.new self, "media/images/daemon.png", true
+    Daemon.images << Gosu::Image.new(self, "media/images/daemon.png", true)
     @daemon = Daemon.new
     @daemon.x = 320
     @daemon.y = 240
+    
+    @chase_counter = 0
   end
   
   
   def update
     @scroll_offset = (@scroll_offset + 1) % 32
+    @chase_counter = (@chase_counter + 1) % CHASE_INTERVAL
+    if @chase_counter == 0
+      @daemon.target_loc(@player.x, @player.y)
+    end
     
     @player.update
     @daemon.update
