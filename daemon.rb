@@ -2,9 +2,13 @@ SCALE_ANIM = [1.0, 0.9, 0.8, 0.7, 0.6, 0.7, 0.8, 0.9]
 ROT_ANIM = [0, 11.25, 22.50, 33.75, 45.0, 56.25, 67.50, 78.75]
 FADE_ANIM = [0xffffffff, 0xdfffffff, 0xbfffffff, 0x7fffffff, 0x5fffffff, 0x7fffffff, 0xbfffffff, 0xdfffffff]
 
+ANIM_STEPS = 8
 SPEED = 2
-TAIL_LENGTH = 8
+TAIL_LENGTH = 12
 TAIL_DELAY = 4
+ANGLE_NOISE = 40
+ANGLE_NOISE_2 = (ANGLE_NOISE / 2)
+
 
 class Daemon
   @@images = Array.new
@@ -14,13 +18,8 @@ class Daemon
   end
   
   def initialize
-    @x = 0
-    @y = 0
-    @anim_step = 0
+    @anim_step = rand(ANIM_STEPS)
     @anim_delay = 0
-
-    @move_x = 0
-    @move_y = 0
     @tail = nil
     @tail_step = 0
     @tail_delay = 0
@@ -36,7 +35,7 @@ class Daemon
   
   def target_loc(x, y)
     
-    target_angle = (Gosu::angle(@x, @y, x, y) + rand(30) - 15).gosu_to_radians
+    target_angle = (Gosu::angle(@x, @y, x, y) + rand(ANGLE_NOISE) - ANGLE_NOISE_2).gosu_to_radians
     
     @move_x = Math::cos(target_angle) * SPEED
     @move_y = Math::sin(target_angle) * SPEED
@@ -52,7 +51,7 @@ class Daemon
     
     @tail_delay = (@tail_delay + 1) % TAIL_DELAY
     if @tail_delay == 0
-      @tail[@tail_step] = [@x, @y]
+      @tail[@tail_step] = [@x - 16, @y - 16]
       @tail_step = (@tail_step + 1) % TAIL_LENGTH
     end
     
@@ -65,11 +64,12 @@ class Daemon
     @@images[0].draw_rot @x, @y, 1, ROT_ANIM[@anim_step], 0.5, 0.5,
       SCALE_ANIM[@anim_step], SCALE_ANIM[@anim_step], FADE_ANIM[@anim_step]
 
-    tail_color = 0x3fffffff
-    (0..TAIL_LENGTH - 1).each do |index|
+    tail_color = 0xffffffff
+    (0..TAIL_LENGTH).each do |index|
+      index = TAIL_LENGTH - index - 1
       tail = @tail[(@tail_step + index) % TAIL_LENGTH]
       @@images[1].draw tail[0], tail[1], 1, 1.0, 1.0, tail_color
-      tail_color += 0x10000000
+      tail_color -= 0x10000000
     end
 
   end
