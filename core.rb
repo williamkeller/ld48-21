@@ -17,11 +17,20 @@ class Core
   
   def advance
     @current_position -= 1
+    index = @rows[@current_position - 15].index /x/
+    if index
+      @spawn_callback.call index, "monster"
+    end
   end
   
   
   def row(index)
     @rows[index].slice(0, 15)  # sanitize
+  end
+  
+  
+  def spawn_at(&callback)
+    @spawn_callback = callback
   end
 
 end

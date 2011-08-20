@@ -59,6 +59,15 @@ class GameWindow < Gosu::Window
     
     @core = Core.new
     @core.load "core1.txt"
+    @core.spawn_at do |col, what| 
+
+      d = Daemon::new
+      d.loc = [col * 32 + 10, 5]
+      d.target_loc @player.x, @player.y
+      @daemons << d
+      
+
+    end
   end
   
   
