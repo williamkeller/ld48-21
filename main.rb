@@ -59,14 +59,13 @@ class GameWindow < Gosu::Window
     
     @core = Core.new
     @core.load "core1.txt"
-    @core_base_line = @core.row_count - 1
   end
   
   
   def update
     @scroll_offset = (@scroll_offset + 1) % 32
     if @scroll_offset == 0
-      @core_base_line -= 1
+      @core.advance
     end
     
     @chase_counter = (@chase_counter + 1) % CHASE_INTERVAL
@@ -81,13 +80,8 @@ class GameWindow < Gosu::Window
   
   
   def draw
-    # (3..17).each do |x|
-    #   (0..20).each do |y|
-    #     @grid.draw x * 32, y * 32 + @scroll_offset, 0
-    #   end
-    # end
     (-1..TILES_Y).each do |row_index|
-      row = @core.row(@core_base_line - TILES_Y + row_index)
+      row = @core.row(@core.current_position - TILES_Y + row_index)
       y = (row_index * 32) + 10 + @scroll_offset
       (0..TILES_X).each do |col_index|
         x = (col_index * 32) + 10
@@ -98,15 +92,10 @@ class GameWindow < Gosu::Window
         end
       end
     end
-    
-    # (1..20).each do |y|
-    #   @wall1.draw 64, y * 32, 0
-    #   @wall1.draw 576, y * 32, 0
-    # end
-    
+        
     @player.draw
     
-   @daemons.each { |d| d.draw }
+    @daemons.each { |d| d.draw }
   end
   
   
