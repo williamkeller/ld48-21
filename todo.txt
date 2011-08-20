@@ -1,0 +1,40 @@
+** The todo list **
+
+** Daemons
+- particle trail
+- explosion
+- follow logic
+
+** Player
+- better image
+- particle trails
+- explosion
+
+** Grid
+- wall graphics
+- collision logic
+- map loading
+- circuit backgrounds
+
+** Processes (entities attached to the background)
+- graphics
+- paths
+- collision logic
+
+** Update packets  (health and messages)
+- graphics
+- acquire sound
+- display text
+
+** Logic bombs (stationary exploding obstacles)
+- graphics
+- explosion animation
+- explosion sounds
+
+** Terminal screen animation
+- startup animation
+- start menu
+
+
+
+
