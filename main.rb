@@ -28,9 +28,10 @@ class GameWindow < Gosu::Window
     
     # Daemon
     Daemon.images << Gosu::Image.new(self, "media/images/daemon.png", true)
+    Daemon.images << Gosu::Image.new(self, "media/images/daemon-tail.png", true)
     @daemon = Daemon.new
-    @daemon.x = 320
-    @daemon.y = 240
+    @daemon.loc = [320, 240]
+
     
     @chase_counter = 0
   end
