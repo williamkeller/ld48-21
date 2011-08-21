@@ -1,3 +1,7 @@
+require "daemon"
+require "player"
+require "core"
+require "explosion"
 
 class GameState
   
@@ -65,29 +69,31 @@ class GameState
     
     @player.update
     if background_collision? @player
-      @explosion_manager.spawn_explosion @player.x, @player.y
+      $explosions.spawn_explosion @player.x, @player.y
+      
     end
+    
     
     @daemons.each do |d| 
       d.update
       if background_collision? d
-        @explosion_manager.spawn_explosion d.x, d.y
+        $explosions.spawn_explosion d.x, d.y
+        
         @daemons.delete d
-        puts "Dumping daemon, #{@daemons.length} remain"
       elsif test_boxes_for_intersect d.box, @player.box
-        @explosion_manager.spawn_explosion d.x, d.y
+        $explosions.spawn_explosion d.x, d.y
+
         @daemons.delete d
-        puts "Colided with player, dumping daemon, #{@daemons.length} remain"
       end
     end
     
-    @explosion_manager.update
+    $explosions.update
     
   end
   
   
   def draw
-    @explosion_manager.draw
+    $explosions.draw
     
     (-2..TILES_Y).each do |row_index|
       row = @core.row(@core.current_position - TILES_Y + row_index)

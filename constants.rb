@@ -7,3 +7,8 @@ CHASE_INTERVAL = 10
 X_BORDER = 10
 Y_BORDER = 10
 TILE_SIZE = 32
+
+L = 0
+T = 1
+R = 2
+B = 3

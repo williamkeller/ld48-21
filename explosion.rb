@@ -38,6 +38,7 @@ class ExplosionManager
   end
 end
 
+$explosions = ExplosionManager.new
 
 class Explosion
 

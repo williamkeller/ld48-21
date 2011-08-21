@@ -1,4 +1,3 @@
-BLIT_SPEED = 3
 
 class Player
   attr_accessor :x, :y
