@@ -62,6 +62,7 @@ class Turret
     @x = x
     @y = y
     @fire_delay = rand(FIRE_DELAY)
+    @angle = 0
   end
   
   
@@ -71,18 +72,19 @@ class Turret
   
   
   def draw
-    @@images[0].draw @x, @y, 1
+#    @@images[0].draw @x, @y, 1
+    @@images[0].draw_rot @x, @y, 1, @angle
   end
   
   
   def target_loc(x, y)
+    @angle = Gosu::angle @x, @y, x, y
     
     @fire_delay = (@fire_delay + 1) % FIRE_DELAY
     if @fire_delay == 0
-      target_angle = (Gosu::angle(@x, @y, x, y).gosu_to_radians)
-    
-      move_x = Math::cos(target_angle) * BULLET_SPEED
-      move_y = Math::sin(target_angle) * BULLET_SPEED
+      angle = @angle.gosu_to_radians
+      move_x = Math::cos(angle) * BULLET_SPEED
+      move_y = Math::sin(angle) * BULLET_SPEED
 
       $sounds.queue_sound :bullet
 
