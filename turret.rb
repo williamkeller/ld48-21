@@ -38,6 +38,10 @@ class Bullet
     @life == -1
   end
   
+  def coords
+    [@x, @y]
+  end
+  
   def box
     [@x - 4, @y - 4, @x + 4, @y + 4]
   end
