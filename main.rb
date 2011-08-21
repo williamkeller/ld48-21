@@ -1,3 +1,5 @@
+$LOAD_PATH << "."
+
 require "rubygems"
 require "gosu"
 require "constants"

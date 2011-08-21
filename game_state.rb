@@ -18,7 +18,6 @@ class GameState
     @debug_font = Gosu::Font.new @wnd, "Courier", 20
     @fonts[:title] = Gosu::Font.new @wnd, "Courier", 40
     
-
     @tile_images = Hash.new
     @tile_images[124] = Gosu::Image.new @wnd, "media/images/wall.png", true   #   |
     @tile_images[45] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   -
