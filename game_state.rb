@@ -68,6 +68,17 @@ class GameState
   
   
   def update
+    if @player_state == DEAD
+      if @wnd.button_down? Gosu::KbR
+        @player.backups -= 1
+        @player.x = 400
+        @player.y = 300
+        @daemons.clear
+        @core.reset
+        @player_state = ALIVE
+      end
+      return
+    end
     @scroll_offset = (@scroll_offset + 1) % 32
     if @scroll_offset == 0
       @core.advance
@@ -87,7 +98,6 @@ class GameState
       @player_timer += 1
       if @player_timer == 100
         @player_state = DEAD
-        @wnd.pause
       end
     end
     
@@ -124,11 +134,17 @@ class GameState
         end
       end
     end
-        
-    @player.draw if @player_state == ALIVE
+    
+    case @player_state
+    when ALIVE
+      @player.draw
+    when DEAD
+      @debug_font.draw "Data corruption detected", 100, 300, 1
+    end    
     
     @daemons.each { |d| d.draw }
     
+    @debug_font.draw "Backups: #{@player.backups}", 500, 460, 2
     @debug_font.draw "[#{@core.current_position}]", 500, 20, 2
     
   end

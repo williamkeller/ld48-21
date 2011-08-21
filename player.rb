@@ -1,6 +1,6 @@
 
 class Player
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :backups
   @@images = Array.new
   
   def self.images
@@ -12,7 +12,9 @@ class Player
     @wnd = window
     @x = 0
     @y = 0
+    @backups = 3
   end
+  
   
   def update
     if @wnd.button_down? Gosu::KbLeft
@@ -30,7 +32,6 @@ class Player
     if @wnd.button_down? Gosu::KbDown
       @y += BLIT_SPEED
     end
-
   end
   
   

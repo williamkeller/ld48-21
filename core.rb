@@ -6,8 +6,14 @@ class Core
   
   def load(name)
     @rows = File.readlines(File.join "maps", name)
+    reset
+  end
+  
+  
+  def reset
     @current_position = @rows.length - 1
   end
+  
   
   def current_position
     @current_position
