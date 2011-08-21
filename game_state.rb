@@ -6,6 +6,7 @@ require "explosion"
 class GameState
 
   # player states
+  LOADING = 0
   ALIVE = 1
   DYING = 2
   DEAD =  3
@@ -17,6 +18,7 @@ class GameState
     
     @debug_font = Gosu::Font.new @wnd, "Courier", 20
     @fonts[:title] = Gosu::Font.new @wnd, "Courier", 40
+    @fonts[:normal] = Gosu::Font.new @wnd, "Courier", 20
     
     @tile_images = Hash.new
     @tile_images[124] = Gosu::Image.new @wnd, "media/images/wall.png", true   #   |
@@ -34,15 +36,13 @@ class GameState
     @p1_delay = 0
     @p2_offset = 0
     @p2_delay = 0
+    @load_screen_delay = 0
     
     
     #Player
     Player.images << Gosu::Image.new(@wnd, "media/images/blip.png", true)
     @player = Player.new(@wnd)
-    @player.x = 400
-    @player.y = 300
     
-    @player_state = ALIVE
     
     # How long to keep running the animation after player death
     @death_timer = 0
@@ -58,28 +58,19 @@ class GameState
 
     @chase_counter = 0
     
-    @core = Core.new
-    @core.load "core1.txt"
-    @core.spawn_at do |col, what| 
-      d = Daemon::new
-      d.loc = [col * 32 + 10, 5]
-      d.target_loc @player.x, @player.y
-      @daemons << d
-    end
-    
-    @core.when_end_of_level do
-      puts "End of level detected!"
-      # Go to next level
-      @wnd.close
-    end
-    
-    @core.message_at do |col, msg|
-      puts "Message received - #{msg}"
-    end
+    load_core "core1.txt"
   end
   
   
   def update
+    if @player_state == LOADING
+      @load_screen_delay += 1
+      if @load_screen_delay == 200
+        @player_state = ALIVE
+      end
+      return
+    end
+    
     if @player_state == DEAD
       if @wnd.button_down? Gosu::KbR
         if @player.backups == 0
@@ -147,6 +138,15 @@ class GameState
   
   
   def draw
+    
+    if @player_state == LOADING
+      @fonts[:title].draw "Loading core 01", 200, 200, 1
+      @fonts[:normal].draw "communication established", 200, 240, 1
+      return
+    end
+
+
+    
     $explosions.draw
     
     (-2..TILES_Y).each do |row_index|
@@ -241,6 +241,33 @@ class GameState
     @player_state = DYING
     @player_timer = 0
     $explosions.spawn_explosion(x, y)
+  end
+  
+  
+  def load_core(name)
+    @core = Core.new
+    @core.load name
+
+    @core.spawn_at do |col, what| 
+      d = Daemon::new
+      d.loc = [col * 32 + 10, 5]
+      d.target_loc @player.x, @player.y
+      @daemons << d
+    end
+    
+    @core.when_end_of_level do
+      load_core "core1.txt"
+    end
+    
+    @core.message_at do |col, msg|
+      puts "Message received - #{msg}"
+    end
+    
+    @player.x = 320 + X_BORDER
+    @player.y = 400
+    
+    @player_state = LOADING
+    @load_screen_delay = 0
   end
   
 end
