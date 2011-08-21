@@ -22,10 +22,13 @@ class GameState
     @fonts[:normal] = Gosu::Font.new @wnd, "Courier", 20
     
     @tile_images = Hash.new
-    @tile_images["|"] = Gosu::Image.new @wnd, "media/images/wall.png", true   #   |
-    @tile_images["-"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   -
-    @tile_images[">"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   >
-    @tile_images["<"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   <
+    @tile_images["|"] = Gosu::Image.new @wnd, "media/images/wall-1.png", true   #   |
+    @tile_images["-"] = Gosu::Image.new @wnd, "media/images/wall-2.png", true    #   -
+    @tile_images[">"] = Gosu::Image.new @wnd, "media/images/wall-3.png", true    #   >
+    @tile_images["<"] = Gosu::Image.new @wnd, "media/images/wall-4.png", true    #   <
+    @tile_images["}"] = Gosu::Image.new @wnd, "media/images/wall-5.png", true    #   <
+    @tile_images["{"] = Gosu::Image.new @wnd, "media/images/wall-6.png", true    #   <
+
     @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
 #    @tile_images["@"] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
 
@@ -302,7 +305,7 @@ class GameState
         @daemons << d
       
       when :turret
-        t = Turret::new(col * 32 + 10, 5)
+        t = Turret::new(col * 32 + 26, 5)
         @turrets << t
       end
       
