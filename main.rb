@@ -4,6 +4,13 @@ require "daemon"
 require "player"
 require "core"
 
+# Rectangle index constants
+L = 0
+T = 1
+R = 2
+B = 3
+
+
 class GameWindow < Gosu::Window
   
   SCREEN_X = 640
@@ -12,17 +19,23 @@ class GameWindow < Gosu::Window
   TILES_Y = 14
   BLIT_SPEED = 3
   CHASE_INTERVAL = 10
+  X_BORDER = 10
+  Y_BORDER = 10
+  TILE_SIZE = 32
   
   
   def initialize
     super SCREEN_X, SCREEN_Y, false
     self.caption = "Escape deletion"
+    
+    @debug_font = Gosu::Font.new self, "Courier", 20
 
     @tile_images = Hash.new
     @tile_images[124] = Gosu::Image.new self, "media/images/wall-1.png", true   #   |
     @tile_images[45] = Gosu::Image.new self, "media/images/wall-2.png", true    #   -
     @tile_images[62] = Gosu::Image.new self, "media/images/wall-3.png", true    #   >
     @tile_images[60] = Gosu::Image.new self, "media/images/wall-4.png", true    #   <
+    @tile_images[64] = Gosu::Image.new self, "media/images/bomb.png", true      #   @
 
     @grid = Gosu::Image.new self, "media/images/grid.png", true
     @blit = Gosu::Image.new self, "media/images/blip.png", true
@@ -40,21 +53,6 @@ class GameWindow < Gosu::Window
     
     @daemons = Array.new
 
-    d = Daemon::new
-    d.loc = [320, 440]
-    d.target_loc @player.x, @player.y
-    @daemons << d
-
-    d = Daemon::new
-    d.loc = [120, 440]
-    d.target_loc @player.x, @player.y
-    @daemons << d
-
-    d = Daemon::new
-    d.loc = [420, 440]
-    d.target_loc @player.x, @player.y
-    @daemons << d
-    
     @chase_counter = 0
     
     @core = Core.new
@@ -64,14 +62,16 @@ class GameWindow < Gosu::Window
       d = Daemon::new
       d.loc = [col * 32 + 10, 5]
       d.target_loc @player.x, @player.y
-      @daemons << d
-      
-
+#      @daemons << d
     end
+    
+    @paused = false
   end
   
   
   def update
+    return if @paused
+    
     @scroll_offset = (@scroll_offset + 1) % 32
     if @scroll_offset == 0
       @core.advance
@@ -83,6 +83,7 @@ class GameWindow < Gosu::Window
     end
     
     @player.update
+    test_for_collision_with_background(@player)
     
    @daemons.each { |d| d.update }
   end
@@ -91,9 +92,9 @@ class GameWindow < Gosu::Window
   def draw
     (-1..TILES_Y).each do |row_index|
       row = @core.row(@core.current_position - TILES_Y + row_index)
-      y = (row_index * 32) + 10 + @scroll_offset
+      y = (row_index * 32) + Y_BORDER + @scroll_offset
       (0..TILES_X).each do |col_index|
-        x = (col_index * 32) + 10
+        x = (col_index * 32) + X_BORDER
         img = @tile_images[row[col_index]]
 
         unless img.nil?
@@ -103,16 +104,117 @@ class GameWindow < Gosu::Window
     end
         
     @player.draw
+#    draw_tile_border @player.x, @player.y
     
     @daemons.each { |d| d.draw }
+    
+    coords = screen_to_map @player.coords
+    @debug_font.draw "[#{coords[0]},#{coords[1]}]", 500, 10, 2
+    @debug_font.draw "[#{@player.x}, #{@player.y}]", 500, 30, 2
+    box = bounding_box_for_tile([8, 2213])
+    @debug_font.draw "[#{box[0]}, #{box[1]}", 500, 50, 2
+    @debug_font.draw "#{box[2]}, #{box[3]}]", 510, 70, 2
+    
+    @debug_font.draw "#{@core.current_position}", 500, 90, 2
+    
+  end
+  
+  
+  def screen_to_map(coords)
+    x = ((coords[0] + X_BORDER) / TILE_SIZE).floor
+    y = @core.current_position - TILES_Y + (coords[1] / TILE_SIZE).floor
+    
+    [x, y]
+  end
+  
+
+  def bounding_box_for_tile(coords)
+    x = (coords[0] * 32) + X_BORDER
+#    y = (@core.current_position - coords[1]) * TILE_SIZE + Y_BORDER + @scroll_offset
+
+    top = @core.current_position - TILES_Y
+    y = (coords[1] - top) * TILE_SIZE + Y_BORDER + @scroll_offset
+    
+    
+    
+    [x, y, x + TILE_SIZE, y + TILE_SIZE]
   end
   
   
   def button_down(key_id)
     close if key_id == Gosu::KbEscape
+    
+    pause if key_id == Gosu::KbSpace
+
+    dump if key_id == Gosu::KbD
+  end
+  
+  
+  def pause
+    @paused = @paused ? false : true
+  end
+  
+  
+  def dump
+    puts "*** Debug dump ***"
+    @player.dump
+    @daemons.each { |d| d.dump }
+    
+    puts "*** Helper functions *** "
+    puts "    screen_to_map(player) = #{screen_to_map(@player.coords).inspect}"
+    puts "    bounding_box_for_tile(player) = #{bounding_box_for_tile(screen_to_map(@player.coords)).inspect}"
+    puts "*** Collisions ***"
+    test_for_collision_with_background @player, true
+    @core.dump
+  end
+  
+  # Colliding with the background
+  # Convert player to map coords to see what's close
+  # Get a list of possible tiles
+  # Convert each possible tile into a bounding box
+  # Test for collision with entity's bounding box
+  def test_for_collision_with_background(entity, do_dump = false)
+    coords = screen_to_map(entity.coords)
+    tiles = @core.possible_collisions(coords)
+    box = entity.box
+    puts tiles.inspect if do_dump
+    tiles.each do |tile|
+      if test_boxes_for_intersect(bounding_box_for_tile(tile), box )
+        puts "Collision!  #{tile.inspect}, #{bounding_box_for_tile(tile).inspect}"
+        dump unless do_dump
+        close
+        break
+      end
+    end
+  end
+  
+  
+  # debug method to visualize tile positions
+  def draw_tile_border(x, y, c = 0xffffffff)
+    coords = screen_to_map([x, y])
+    box = bounding_box_for_tile(coords)
+    draw_quad(box[0], box[1], c, box[2], box[1], c, box[2], box[3], c, box[0], box[3], c, 0)
+  end
+  
+  
+  def test_boxes_for_intersect(box1, box2)
+#    not (box2[0] > box1[2] or box2[2] < box1[0] or box2[1] > box1[3] or box2[3] < box1[1])
+
+    ((box1[L] > box2[L] and box1[L] < box2[R]) or (box2[L] > box1[L] and box2[L] < box1[R])) and
+      ((box1[T] > box2[T] and box1[T] < box2[B]) or (box2[T] > box1[T] and box2[T] < box1[B]))
+    # return ((nself.l >= rect.l && nself.l <= rect.r) or (rect.l >= nself.l && rect.l <= nself.r)) &&
+    #                 ((nself.t >= rect.t && nself.t <= rect.b) or (rect.t >= nself.t && rect.t <= nself.b))
+    #  end
+    # return ! ( r2->left > r1->right
+    #     || r2->right < r1->left
+    #     || r2->top > r1->bottom
+    #     || r2->bottom < r1->top
+    #     );
   end
   
 end
+
+
 
 
 def main

@@ -36,7 +36,24 @@ class Player
   
   
   def draw
-    @@images[0].draw @x, @y, 1    
+    @@images[0].draw @x - 16, @y - 16, 1    
+  end
+  
+  
+  def coords
+    [@x, @y]
+  end
+  
+  
+  def box
+    [@x - 16, @y - 16, @x + 16, @y + 16]
+  end
+  
+  
+  def dump
+    puts "== Player =="
+    puts "   coords #{@x}, #{@y}"
+    puts "   box #{@x - 16}, #{@y - 16}, #{@x + 16}, #{@y + 16}"
   end
   
 end
