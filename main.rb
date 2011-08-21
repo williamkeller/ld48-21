@@ -1,6 +1,7 @@
 require "rubygems"
 require "gosu"
 require "constants"
+require "menu_state"
 require "game_state"
 
 class GameWindow < Gosu::Window
@@ -10,9 +11,17 @@ class GameWindow < Gosu::Window
     self.caption = "Escape deletion"
     
     @states = Hash.new
-    @states[:game] = GameState.new(self)
-    @current_state = @states[:game]
     
+    state = MenuState.new(self)
+    state.when_start do
+      @current_state = @states[:game]
+    end
+    @states[:menu] = state 
+    
+    state = GameState.new(self)
+    @states[:game] = state
+    
+    @current_state = @states[:menu]
     
     @paused = false
   end
@@ -45,8 +54,6 @@ class GameWindow < Gosu::Window
     @paused = @paused ? false : true
   end
 end
-
-
 
 
 def main
