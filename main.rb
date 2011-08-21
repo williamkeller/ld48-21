@@ -71,9 +71,6 @@ class GameWindow < Gosu::Window
     
     Explosion.images << Gosu::Image.new(self, "media/images/blast-ring.png", true)
     @explosion_manager = ExplosionManager.new
-    # @explosion = Explosion.new
-    # @explosion.loc = [320, 240]
-    # @exploding = false
   end
   
   
@@ -96,14 +93,7 @@ class GameWindow < Gosu::Window
     @daemons.each { |d| d.update }
     
     @explosion_manager.update
-    
-    # if @exploding
-    #   if @explosion.finished?
-    #     @exploding = false
-    #   else
-    #     @explosion.update
-    #   end
-    # end
+
   end
   
   
@@ -135,7 +125,6 @@ class GameWindow < Gosu::Window
     
     @debug_font.draw "#{@core.current_position}", 500, 90, 2
     
-#    @explosion.draw if @exploding
     @explosion_manager.draw
   end
   
@@ -150,12 +139,9 @@ class GameWindow < Gosu::Window
 
   def bounding_box_for_tile(coords)
     x = (coords[0] * 32) + X_BORDER
-#    y = (@core.current_position - coords[1]) * TILE_SIZE + Y_BORDER + @scroll_offset
 
     top = @core.current_position - TILES_Y
     y = (coords[1] - top) * TILE_SIZE + Y_BORDER + @scroll_offset
-    
-    
     
     [x, y, x + TILE_SIZE, y + TILE_SIZE]
   end
