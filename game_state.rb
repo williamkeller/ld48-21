@@ -30,6 +30,10 @@ class GameState
     @tile_images["{"] = Gosu::Image.new @wnd, "media/images/wall-6.png", true   
     @tile_images["^"] = Gosu::Image.new @wnd, "media/images/wall-7.png", true   
     @tile_images["v"] = Gosu::Image.new @wnd, "media/images/wall-8.png", true   
+    @tile_images["/"] = Gosu::Image.new @wnd, "media/images/wall-9.png", true   
+    @tile_images["\\"] = Gosu::Image.new @wnd, "media/images/wall-10.png", true   
+    @tile_images["7"] = Gosu::Image.new @wnd, "media/images/wall-11.png", true   
+    @tile_images["L"] = Gosu::Image.new @wnd, "media/images/wall-12.png", true   
     
 
     @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
