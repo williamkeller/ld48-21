@@ -21,12 +21,12 @@ class GameState
     @fonts[:normal] = Gosu::Font.new @wnd, "Courier", 20
     
     @tile_images = Hash.new
-    @tile_images[124] = Gosu::Image.new @wnd, "media/images/wall.png", true   #   |
-    @tile_images[45] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   -
-    @tile_images[62] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   >
-    @tile_images[60] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   <
-    @tile_images[61] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
-    @tile_images[64] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
+    @tile_images["|"] = Gosu::Image.new @wnd, "media/images/wall.png", true   #   |
+    @tile_images["-"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   -
+    @tile_images[">"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   >
+    @tile_images["<"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   <
+    @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
+    @tile_images["@"] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
 
     @grid = Gosu::Image.new @wnd, "media/images/grid.png", true
     @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
@@ -58,7 +58,9 @@ class GameState
 
     @chase_counter = 0
     
-    load_core "core1.txt"
+    @maps = ["core1.txt", "core2.txt"]
+    load_core @maps[0]
+    @current_map = 0
   end
   
   
@@ -256,7 +258,12 @@ class GameState
     end
     
     @core.when_end_of_level do
-      load_core "core1.txt"
+      @current_map += 1
+      if @current_map == @maps.length
+        puts "You win!"
+      else
+        load_core @maps[@current_map]
+      end
     end
     
     @core.message_at do |col, msg|

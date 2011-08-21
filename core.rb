@@ -78,7 +78,7 @@ class Core
     (-1..1).each do |row_index|
       row = @rows[coords[1] + row_index]
       (left_edge..right_edge).each do |col|
-        tiles << [col, coords[1] + row_index] if [45, 60, 62, 64, 124].index row[col]
+        tiles << [col, coords[1] + row_index] if ["|", "-", "@"].index row[col]
       end
     end
     tiles
