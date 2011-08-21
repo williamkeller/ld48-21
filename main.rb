@@ -64,15 +64,16 @@ class GameWindow < Gosu::Window
       d = Daemon::new
       d.loc = [col * 32 + 10, 5]
       d.target_loc @player.x, @player.y
-#      @daemons << d
+      @daemons << d
     end
     
     @paused = false
     
     Explosion.images << Gosu::Image.new(self, "media/images/blast-ring.png", true)
-    @explosion = Explosion.new
-    @explosion.loc = [320, 240]
-    @exploding = false
+    @explosion_manager = ExplosionManager.new
+    # @explosion = Explosion.new
+    # @explosion.loc = [320, 240]
+    # @exploding = false
   end
   
   
@@ -93,14 +94,16 @@ class GameWindow < Gosu::Window
     test_for_collision_with_background(@player)
     
     @daemons.each { |d| d.update }
-   
-    if @exploding
-      if @explosion.finished?
-        @exploding = false
-      else
-        @explosion.update
-      end
-    end
+    
+    @explosion_manager.update
+    
+    # if @exploding
+    #   if @explosion.finished?
+    #     @exploding = false
+    #   else
+    #     @explosion.update
+    #   end
+    # end
   end
   
   
@@ -132,7 +135,8 @@ class GameWindow < Gosu::Window
     
     @debug_font.draw "#{@core.current_position}", 500, 90, 2
     
-    @explosion.draw if @exploding
+#    @explosion.draw if @exploding
+    @explosion_manager.draw
   end
   
 
@@ -165,12 +169,7 @@ class GameWindow < Gosu::Window
     dump if key_id == Gosu::KbD
     
     if key_id == Gosu::KbE
-      if @exploding
-        @exploding = false
-      else
-        @exploding = true
-        @explosion.reset
-      end
+      @explosion_manager.spawn_explosion @player.x, @player.y
     end
   end
   
@@ -206,8 +205,7 @@ class GameWindow < Gosu::Window
     tiles.each do |tile|
       if test_boxes_for_intersect(bounding_box_for_tile(tile), box )
         puts "Collision!  #{tile.inspect}, #{bounding_box_for_tile(tile).inspect}"
-        dump unless do_dump
-        close
+        @explosion_manager.spawn_explosion @player.x, @player.y
         break
       end
     end

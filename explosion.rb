@@ -1,8 +1,42 @@
 
 
-SCALE_STEPS = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-FADE_STEPS = [0xffffffff, 0xefffffff, 0xdfffffff, 0xcfffffff, 0xbfffffff, 0xafffffff, 0x9fffffff, 0x8fffffff]
-ANIM_DELAY = 8
+SCALE_STEPS = [0.1, 0.2, 0.3, 0.45, 0.6, 0.8, 1.0, 1.2]
+FADE_STEPS = [0xffffffff, 0xefffffff, 0xdfffffff, 0xbfffffff, 0x9fffffff, 0x7fffffff, 0x5fffffff, 0x3fffffff]
+ANIM_DELAY = 4
+
+
+class ExplosionManager
+  
+  def initialize
+    @explosions = Array.new
+  end
+  
+  
+  def update
+    @explosions.each do |ex|
+      if ex.finished?
+        @explosions.delete ex
+        puts "dumping explosion"
+      else
+        ex.update
+      end
+    end
+  end
+  
+  
+  def draw
+    @explosions.each do |ex|
+      ex.draw
+    end
+  end
+  
+  
+  def spawn_explosion(x, y)
+    ex = Explosion.new
+    ex.loc = [x, y]
+    @explosions << ex
+  end
+end
 
 
 class Explosion
