@@ -9,7 +9,7 @@
 - start menu
 
 - Game music
-- Bullets need to collide with the walls
-- Player needs to be constrained to the screen
+
+
 
 

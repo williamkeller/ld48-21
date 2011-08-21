@@ -12,7 +12,7 @@ class Core
   
   
   def reset
-    @current_position = @rows.length - 1
+    @current_position = @rows.length - 3
   end
   
   
@@ -84,7 +84,7 @@ class Core
     (-1..1).each do |row_index|
       row = @rows[coords[1] + row_index]
       (left_edge..right_edge).each do |col|
-        tiles << [col, coords[1] + row_index] if ["|", "-", "@"].index row[col]
+        tiles << [col, coords[1] + row_index] if "|-<>{}[]^v@".index row[col]
       end
     end
     tiles

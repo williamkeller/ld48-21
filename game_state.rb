@@ -73,20 +73,19 @@ class GameState
     
     @maps = ["core1.txt", "core2.txt"]
     @current_map = 0
-    
   end
   
   
   def start
     load_core @maps[0]
-    $sounds.queue_sound :loading
+    reset_core
   end
   
   
   def update
     if @player_state == LOADING
       @load_screen_delay += 1
-      if @load_screen_delay == 200
+      if @load_screen_delay == 100
         @player_state = ALIVE
       end
       return
@@ -98,14 +97,11 @@ class GameState
           @game_over_handler.call
           return
         end
-        @player.x = 400
-        @player.y = 300
-        @daemons.clear
-        @core.reset
-        @player_state = ALIVE
-        @player.backups -= 1
+        reset_core
       end
+      
       return
+      
     end
     @scroll_offset = (@scroll_offset + 1) % 32
     if @scroll_offset == 0
@@ -151,10 +147,11 @@ class GameState
       if background_collision? d
         $explosions.spawn_explosion d.x, d.y
         $sounds.queue_sound :explosion
-        
         @daemons.delete d
       elsif test_boxes_for_intersect d.box, @player.box
         kill_player d.x, d.y
+        $sounds.queue_sound :player
+          
         @daemons.delete d
       end
     end
@@ -292,14 +289,23 @@ class GameState
     $explosions.spawn_explosion(x, y)
   end
   
+  def reset_core
+    @core.reset
+    @daemons.clear
+    @turrets.clear
+    @bullets.clear
+    @player.x = 320 + X_BORDER
+    @player.y = 400
+    
+    @player_state = LOADING
+    @load_screen_delay = 0
+    $sounds.queue_sound :loading
+  end
   
   def load_core(name)
     @core = Core.new
     @core.load name
     
-    @daemons.clear
-    @turrets.clear
-    @bullets.clear
 
     @core.spawn_at do |col, what| 
       case what
@@ -328,12 +334,6 @@ class GameState
     @core.message_at do |col, msg|
       puts "Message received - #{msg}"
     end
-    
-    @player.x = 320 + X_BORDER
-    @player.y = 400
-    
-    @player_state = LOADING
-    @load_screen_delay = 0
   end
   
 end
