@@ -93,12 +93,15 @@ class GameWindow < Gosu::Window
     end
     
     @daemons.each do |d| 
+      d.update
       if background_collision? d
         @explosion_manager.spawn_explosion d.x, d.y
         @daemons.delete d
         puts "Dumping daemon, #{@daemons.length} remain"
-      else
-        d.update 
+      elsif test_boxes_for_intersect d.box, @player.box
+        @explosion_manager.spawn_explosion d.x, d.y
+        @daemons.delete d
+        puts "Colided with player, dumping daemon, #{@daemons.length} remain"
       end
     end
     
