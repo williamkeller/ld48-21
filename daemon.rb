@@ -64,7 +64,7 @@ class Daemon
   
   
   def box
-    [@x - 16, @y - 16, @x + 16, @y + 16]
+    [@x - 10, @y - 10, @x + 10, @y + 10]
   end
   
   

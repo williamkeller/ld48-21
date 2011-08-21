@@ -1,4 +1,7 @@
 
+CLIP_TOP = 10
+CLIP_BOTTOM = SCREEN_Y - 10
+
 class Player
   attr_accessor :x, :y, :backups
   @@images = Array.new
@@ -44,6 +47,12 @@ class Player
     
     if @wnd.button_down? Gosu::KbDown
       @y += BLIT_SPEED
+    end
+    
+    if @y >= CLIP_BOTTOM
+      @y = CLIP_BOTTOM
+    elsif @y <= CLIP_TOP
+      @y = CLIP_TOP
     end
   end
   
