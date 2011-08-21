@@ -24,6 +24,7 @@ class GameWindow < Gosu::Window
     state = MenuState.new(self)
     state.when_start do
       @current_state = @states[:game]
+      @current_state.start
     end
     @states[:menu] = state 
     

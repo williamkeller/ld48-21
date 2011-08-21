@@ -66,8 +66,14 @@ class GameState
     @chase_counter = 0
     
     @maps = ["core1.txt", "core2.txt"]
-    load_core @maps[0]
     @current_map = 0
+    
+  end
+  
+  
+  def start
+    load_core @maps[0]
+    $sounds.queue_sound :loading
   end
   
   
