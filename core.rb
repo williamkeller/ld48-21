@@ -36,8 +36,14 @@ class Core
     
     index = @rows[@current_position - LOOKAHEAD].index /x/
     if index
-      @spawn_callback.call index, "monster"
+      @spawn_callback.call index, :daemon
     end
+    
+    index = @rows[@current_position - LOOKAHEAD].index /@/
+    if index
+      @spawn_callback.call index, :turret
+    end
+
     
     index = @rows[@current_position - LOOKAHEAD].index /&/
     if index

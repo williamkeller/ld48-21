@@ -1,4 +1,5 @@
 require "daemon"
+require "turret"
 require "player"
 require "core"
 require "explosion"
@@ -26,7 +27,7 @@ class GameState
     @tile_images[">"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   >
     @tile_images["<"] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   <
     @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
-    @tile_images["@"] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
+#    @tile_images["@"] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
 
     @grid = Gosu::Image.new @wnd, "media/images/grid.png", true
     @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
@@ -56,6 +57,12 @@ class GameState
     
     @daemons = Array.new
 
+    Turret.images << Gosu::Image.new(@wnd, "media/images/turret.png", true)
+    Bullet.images << Gosu::Image.new(@wnd, "media/images/bullet.png", true)
+    
+    @turrets = Array.new
+    @bullets = Array.new
+    
     @chase_counter = 0
     
     @maps = ["core1.txt", "core2.txt"]
@@ -107,6 +114,10 @@ class GameState
     @chase_counter = (@chase_counter + 1) % CHASE_INTERVAL
     if @chase_counter == 0
       @daemons.each { |d| d.target_loc(@player.x, @player.y) }
+      @turrets.each do |t| 
+        b = t.target_loc(@player.x, @player.y) 
+        @bullets << b unless b.nil?
+      end
     end
     
     if @player_state == ALIVE
@@ -133,6 +144,22 @@ class GameState
       elsif test_boxes_for_intersect d.box, @player.box
         kill_player d.x, d.y
         @daemons.delete d
+      end
+    end
+    
+    @turrets.each do |t|
+      t.update
+      if t.y > SCREEN_Y
+        @turrets.delete t
+        puts "Dumping turret"
+      end
+    end
+    
+    @bullets.each do |b|
+      b.update
+      if b.finished?
+        @bullets.delete b
+        puts "dumping bullet"
       end
     end
     
@@ -178,6 +205,8 @@ class GameState
     end    
     
     @daemons.each { |d| d.draw }
+    @turrets.each { |t| t.draw }
+    @bullets.each { |b| b.draw }
     
     @debug_font.draw "Backups: #{@player.backups}", 500, 460, 2
     @debug_font.draw "[#{@core.current_position}]", 500, 20, 2
@@ -251,12 +280,24 @@ class GameState
   def load_core(name)
     @core = Core.new
     @core.load name
+    
+    @daemons.clear
+    @turrets.clear
+    @bullets.clear
 
     @core.spawn_at do |col, what| 
-      d = Daemon::new
-      d.loc = [col * 32 + 10, 5]
-      d.target_loc @player.x, @player.y
-      @daemons << d
+      case what
+      when :daemon
+        d = Daemon::new
+        d.loc = [col * 32 + 10, 5]
+        d.target_loc @player.x, @player.y
+        @daemons << d
+      
+      when :turret
+        t = Turret::new(col * 32 + 10, 5)
+        @turrets << t
+      end
+      
     end
     
     @core.when_end_of_level do
