@@ -12,7 +12,7 @@ class Player
     @wnd = window
     @x = 0
     @y = 0
-    @backups = 3
+    @backups = 2
   end
   
   

@@ -75,12 +75,16 @@ class GameState
   def update
     if @player_state == DEAD
       if @wnd.button_down? Gosu::KbR
-        @player.backups -= 1
+        if @player.backups == 0
+          @game_over_handler.call
+          return
+        end
         @player.x = 400
         @player.y = 300
         @daemons.clear
         @core.reset
         @player_state = ALIVE
+        @player.backups -= 1
       end
       return
     end
@@ -156,6 +160,10 @@ class GameState
       @player.draw
     when DEAD
       @debug_font.draw "Data corruption detected", 100, 300, 1
+      if @player.backups == 0
+        @debug_font.draw "Restore not possible", 100, 320, 1
+        @debug_font.draw "Press any key to restart system", 100, 340, 1
+      end
     end    
     
     @daemons.each { |d| d.draw }
@@ -178,6 +186,11 @@ class GameState
       end
     end
     
+  end
+  
+  
+  def when_game_over(&handler)
+    @game_over_handler = handler
   end
   
   

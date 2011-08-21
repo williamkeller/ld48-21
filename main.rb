@@ -19,7 +19,12 @@ class GameWindow < Gosu::Window
     @states[:menu] = state 
     
     state = GameState.new(self)
+    state.when_game_over do
+      puts "Game over detected"
+      close
+    end
     @states[:game] = state
+
     
     @current_state = @states[:menu]
     
