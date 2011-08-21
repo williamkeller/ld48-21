@@ -3,6 +3,8 @@ require "gosu"
 require "daemon"
 require "player"
 require "core"
+require "explosion"
+
 
 # Rectangle index constants
 L = 0
@@ -66,6 +68,11 @@ class GameWindow < Gosu::Window
     end
     
     @paused = false
+    
+    Explosion.images << Gosu::Image.new(self, "media/images/blast-ring.png", true)
+    @explosion = Explosion.new
+    @explosion.loc = [320, 240]
+    @exploding = false
   end
   
   
@@ -85,7 +92,15 @@ class GameWindow < Gosu::Window
     @player.update
     test_for_collision_with_background(@player)
     
-   @daemons.each { |d| d.update }
+    @daemons.each { |d| d.update }
+   
+    if @exploding
+      if @explosion.finished?
+        @exploding = false
+      else
+        @explosion.update
+      end
+    end
   end
   
   
@@ -117,9 +132,10 @@ class GameWindow < Gosu::Window
     
     @debug_font.draw "#{@core.current_position}", 500, 90, 2
     
+    @explosion.draw if @exploding
   end
   
-  
+
   def screen_to_map(coords)
     x = ((coords[0] + X_BORDER) / TILE_SIZE).floor
     y = @core.current_position - TILES_Y + (coords[1] / TILE_SIZE).floor
@@ -147,6 +163,15 @@ class GameWindow < Gosu::Window
     pause if key_id == Gosu::KbSpace
 
     dump if key_id == Gosu::KbD
+    
+    if key_id == Gosu::KbE
+      if @exploding
+        @exploding = false
+      else
+        @exploding = true
+        @explosion.reset
+      end
+    end
   end
   
   
@@ -198,18 +223,8 @@ class GameWindow < Gosu::Window
   
   
   def test_boxes_for_intersect(box1, box2)
-#    not (box2[0] > box1[2] or box2[2] < box1[0] or box2[1] > box1[3] or box2[3] < box1[1])
-
     ((box1[L] > box2[L] and box1[L] < box2[R]) or (box2[L] > box1[L] and box2[L] < box1[R])) and
       ((box1[T] > box2[T] and box1[T] < box2[B]) or (box2[T] > box1[T] and box2[T] < box1[B]))
-    # return ((nself.l >= rect.l && nself.l <= rect.r) or (rect.l >= nself.l && rect.l <= nself.r)) &&
-    #                 ((nself.t >= rect.t && nself.t <= rect.b) or (rect.t >= nself.t && rect.t <= nself.b))
-    #  end
-    # return ! ( r2->left > r1->right
-    #     || r2->right < r1->left
-    #     || r2->top > r1->bottom
-    #     || r2->bottom < r1->top
-    #     );
   end
   
 end
