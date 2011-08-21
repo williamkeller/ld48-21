@@ -13,8 +13,11 @@ class GameState
   
   def initialize(window)
     @wnd = window
+    @fonts = Hash.new
     
     @debug_font = Gosu::Font.new @wnd, "Courier", 20
+    @fonts[:title] = Gosu::Font.new @wnd, "Courier", 40
+    
 
     @tile_images = Hash.new
     @tile_images[124] = Gosu::Image.new @wnd, "media/images/wall.png", true   #   |
@@ -43,7 +46,9 @@ class GameState
     
     # How long to keep running the animation after player death
     @death_timer = 0
+
     
+    Explosion.images << Gosu::Image.new(@wnd, "media/images/blast-ring.png", true)
     
     # Daemons
     Daemon.images << Gosu::Image.new(@wnd, "media/images/daemon.png", true)
@@ -65,10 +70,6 @@ class GameState
     @core.message_at do |col, msg|
       puts "Message received - #{msg}"
     end
-    
-    Explosion.images << Gosu::Image.new(@wnd, "media/images/blast-ring.png", true)
-    @explosion_manager = ExplosionManager.new
-    
   end
   
   

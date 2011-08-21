@@ -25,7 +25,6 @@ class GameWindow < Gosu::Window
     end
     @states[:game] = state
 
-    
     @current_state = @states[:menu]
     
     @paused = false

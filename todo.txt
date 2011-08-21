@@ -1,20 +1,13 @@
 ** The todo list **
 
-** Daemons
-- particle trail
-- explosion
-- follow logic
 
 ** Player
 - better image
 - particle trails
-- explosion
 
 ** Grid
 - wall graphics
-- collision logic
-- map loading
-- circuit backgrounds
+- end of level conditions
 
 ** Processes (entities attached to the background)
 - graphics
