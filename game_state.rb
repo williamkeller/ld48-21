@@ -24,7 +24,8 @@ class GameState
     @tile_images[45] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   -
     @tile_images[62] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   >
     @tile_images[60] = Gosu::Image.new @wnd, "media/images/wall.png", true    #   <
-    @tile_images[64] = Gosu::Image.new @wnd, "media/images/bomb.png", true      #   @
+    @tile_images[61] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
+    @tile_images[64] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
 
     @grid = Gosu::Image.new @wnd, "media/images/grid.png", true
     @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
@@ -65,6 +66,12 @@ class GameState
       d.loc = [col * 32 + 10, 5]
       d.target_loc @player.x, @player.y
       @daemons << d
+    end
+    
+    @core.when_end_of_level do
+      puts "End of level detected!"
+      # Go to next level
+      @wnd.close
     end
     
     @core.message_at do |col, msg|

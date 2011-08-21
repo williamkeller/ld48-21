@@ -2,6 +2,7 @@ class Core
   MAP_WIDTH = 20
   WALL_RE = /\-/
   LOOKAHEAD = 12
+  END_OF_LEVEL = LOOKAHEAD + 2
   
   
   def load(name)
@@ -27,6 +28,12 @@ class Core
   
   def advance
     @current_position -= 1
+    
+    if @current_position == END_OF_LEVEL
+      @end_of_level.call
+      return
+    end
+    
     index = @rows[@current_position - LOOKAHEAD].index /x/
     if index
       @spawn_callback.call index, "monster"
@@ -53,6 +60,11 @@ class Core
   
   def message_at(&callback)
     @msg_callback = callback
+  end
+  
+  
+  def when_end_of_level(&callback)
+    @end_of_level = callback
   end
   
   
