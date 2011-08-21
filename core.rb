@@ -1,6 +1,8 @@
 class Core
-  MAP_WIDTH = 15
+  MAP_WIDTH = 20
   WALL_RE = /\-/
+  LOOKAHEAD = 12
+  
   
   def load(name)
     @rows = File.readlines(File.join "maps", name)
@@ -19,10 +21,17 @@ class Core
   
   def advance
     @current_position -= 1
-    index = @rows[@current_position - 15].index /x/
+    index = @rows[@current_position - LOOKAHEAD].index /x/
     if index
       @spawn_callback.call index, "monster"
     end
+    
+    index = @rows[@current_position - LOOKAHEAD].index /&/
+    if index
+      row = @rows[@current_position - LOOKAHEAD]
+      @msg_callback.call 0, row.slice(index + 2, row.length)
+    end
+    
   end
   
   
@@ -33,6 +42,11 @@ class Core
   
   def spawn_at(&callback)
     @spawn_callback = callback
+  end
+  
+  
+  def message_at(&callback)
+    @msg_callback = callback
   end
   
   

@@ -17,8 +17,8 @@ class GameWindow < Gosu::Window
   
   SCREEN_X = 640
   SCREEN_Y = 480
-  TILES_X = 15 
-  TILES_Y = 14
+  TILES_X = 20
+  TILES_Y = 15
   BLIT_SPEED = 3
   CHASE_INTERVAL = 10
   X_BORDER = 10
@@ -33,10 +33,10 @@ class GameWindow < Gosu::Window
     @debug_font = Gosu::Font.new self, "Courier", 20
 
     @tile_images = Hash.new
-    @tile_images[124] = Gosu::Image.new self, "media/images/wall-1.png", true   #   |
-    @tile_images[45] = Gosu::Image.new self, "media/images/wall-2.png", true    #   -
-    @tile_images[62] = Gosu::Image.new self, "media/images/wall-3.png", true    #   >
-    @tile_images[60] = Gosu::Image.new self, "media/images/wall-4.png", true    #   <
+    @tile_images[124] = Gosu::Image.new self, "media/images/wall.png", true   #   |
+    @tile_images[45] = Gosu::Image.new self, "media/images/wall.png", true    #   -
+    @tile_images[62] = Gosu::Image.new self, "media/images/wall.png", true    #   >
+    @tile_images[60] = Gosu::Image.new self, "media/images/wall.png", true    #   <
     @tile_images[64] = Gosu::Image.new self, "media/images/bomb.png", true      #   @
 
     @grid = Gosu::Image.new self, "media/images/grid.png", true
@@ -60,11 +60,14 @@ class GameWindow < Gosu::Window
     @core = Core.new
     @core.load "core1.txt"
     @core.spawn_at do |col, what| 
-
       d = Daemon::new
       d.loc = [col * 32 + 10, 5]
       d.target_loc @player.x, @player.y
       @daemons << d
+    end
+    
+    @core.message_at do |col, msg|
+      puts "Message received - #{msg}"
     end
     
     @paused = false
@@ -111,7 +114,7 @@ class GameWindow < Gosu::Window
   
   
   def draw
-    (-1..TILES_Y).each do |row_index|
+    (-2..TILES_Y).each do |row_index|
       row = @core.row(@core.current_position - TILES_Y + row_index)
       y = (row_index * 32) + Y_BORDER + @scroll_offset
       (0..TILES_X).each do |col_index|
@@ -125,18 +128,10 @@ class GameWindow < Gosu::Window
     end
         
     @player.draw
-#    draw_tile_border @player.x, @player.y
     
     @daemons.each { |d| d.draw }
     
-    coords = screen_to_map @player.coords
-    @debug_font.draw "[#{coords[0]},#{coords[1]}]", 500, 10, 2
-    @debug_font.draw "[#{@player.x}, #{@player.y}]", 500, 30, 2
-    box = bounding_box_for_tile([8, 2213])
-    @debug_font.draw "[#{box[0]}, #{box[1]}", 500, 50, 2
-    @debug_font.draw "#{box[2]}, #{box[3]}]", 510, 70, 2
-    
-    @debug_font.draw "#{@core.current_position}", 500, 90, 2
+    @debug_font.draw "[#{@core.current_position}]", 500, 20, 2
     
     @explosion_manager.draw
   end
@@ -208,15 +203,7 @@ class GameWindow < Gosu::Window
     false
   end
   
-  
-  # debug method to visualize tile positions
-  def draw_tile_border(x, y, c = 0xffffffff)
-    coords = screen_to_map([x, y])
-    box = bounding_box_for_tile(coords)
-    draw_quad(box[0], box[1], c, box[2], box[1], c, box[2], box[3], c, box[0], box[3], c, 0)
-  end
-  
-  
+
   def test_boxes_for_intersect(box1, box2)
     ((box1[L] > box2[L] and box1[L] < box2[R]) or (box2[L] > box1[L] and box2[L] < box1[R])) and
       ((box1[T] > box2[T] and box1[T] < box2[B]) or (box2[T] > box1[T] and box2[T] < box1[B]))
