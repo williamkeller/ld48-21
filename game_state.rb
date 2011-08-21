@@ -151,7 +151,6 @@ class GameState
       t.update
       if t.y > SCREEN_Y
         @turrets.delete t
-        puts "Dumping turret"
       end
     end
     
@@ -159,7 +158,6 @@ class GameState
       b.update
       if b.finished?
         @bullets.delete b
-        puts "dumping bullet"
       end
     end
     

@@ -108,14 +108,4 @@ class Daemon
     end
 
   end
-  
-  def dump
-    puts "== Daemon =="
-    puts "   x = #{@x}"
-    puts "   y = #{@y}"
-    puts "   move_x = #{@move_x}"
-    puts "   move_y = #{@move_y}"
-    puts "   anim_step = #{@anim_step}"
-  end
-  
 end

@@ -78,6 +78,9 @@ class Turret
     
       move_x = Math::cos(target_angle) * BULLET_SPEED
       move_y = Math::sin(target_angle) * BULLET_SPEED
+
+      $sounds.queue_sound :bullet
+
       Bullet.new @x + 16, @y + 16, move_x, move_y
     end
   end

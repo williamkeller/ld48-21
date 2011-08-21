@@ -7,6 +7,7 @@ class SoundManager
     
     @sounds[:explosion] = Gosu::Sample.new @wnd, "media/sounds/explosion.wav"
     @sounds[:player] = Gosu::Sample.new @wnd, "media/sounds/explosion2.wav"
+    @sounds[:bullet] = Gosu::Sample.new @wnd, "media/sounds/bullet-fire.wav"
   end
   
   def queue_sound(sound_id)
