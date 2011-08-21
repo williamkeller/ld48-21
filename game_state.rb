@@ -4,6 +4,12 @@ require "core"
 require "explosion"
 
 class GameState
+
+  # player states
+  ALIVE = 1
+  DYING = 2
+  DEAD =  3
+  
   
   def initialize(window)
     @wnd = window
@@ -27,6 +33,11 @@ class GameState
     @player = Player.new(@wnd)
     @player.x = 400
     @player.y = 300
+    
+    @player_state = ALIVE
+    
+    # How long to keep running the animation after player death
+    @death_timer = 0
     
     
     # Daemons
@@ -67,10 +78,17 @@ class GameState
       @daemons.each { |d| d.target_loc(@player.x, @player.y) }
     end
     
-    @player.update
-    if background_collision? @player
-      $explosions.spawn_explosion @player.x, @player.y
-      
+    if @player_state == ALIVE
+      @player.update
+      if background_collision? @player
+        kill_player @player.x, @player.y
+      end
+    elsif @player_state == DYING
+      @player_timer += 1
+      if @player_timer == 100
+        @player_state = DEAD
+        @wnd.pause
+      end
     end
     
     
@@ -81,8 +99,7 @@ class GameState
         
         @daemons.delete d
       elsif test_boxes_for_intersect d.box, @player.box
-        $explosions.spawn_explosion d.x, d.y
-
+        kill_player d.x, d.y
         @daemons.delete d
       end
     end
@@ -108,7 +125,7 @@ class GameState
       end
     end
         
-    @player.draw
+    @player.draw if @player_state == ALIVE
     
     @daemons.each { |d| d.draw }
     
@@ -152,5 +169,11 @@ class GameState
     [x, y, x + TILE_SIZE, y + TILE_SIZE]
   end
   
+  
+  def kill_player(x, y)
+    @player_state = DYING
+    @player_timer = 0
+    $explosions.spawn_explosion(x, y)
+  end
   
 end
