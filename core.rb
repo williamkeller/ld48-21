@@ -89,9 +89,4 @@ class Core
     end
     tiles
   end
-
-  def dump
-    puts "*** Map file ***"
-    puts "    current_position = #{@current_position}"
-  end
 end

@@ -1,33 +1,15 @@
 ** The todo list **
 
-
-** Player
-- better image
-- particle trails
-
 ** Grid
 - wall graphics
 - end of level conditions
-
-** Processes (entities attached to the background)
-- graphics
-- paths
-- collision logic
-
-** Update packets  (health and messages)
-- graphics
-- acquire sound
-- display text
-
-** Logic bombs (stationary exploding obstacles)
-- graphics
-- explosion animation
-- explosion sounds
 
 ** Terminal screen animation
 - startup animation
 - start menu
 
-
+- Game music
+- Bullets need to collide with the walls
+- Player needs to be constrained to the screen
 
 

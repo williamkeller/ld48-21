@@ -22,12 +22,15 @@ class GameState
     @fonts[:normal] = Gosu::Font.new @wnd, "Courier", 20
     
     @tile_images = Hash.new
-    @tile_images["|"] = Gosu::Image.new @wnd, "media/images/wall-1.png", true   #   |
-    @tile_images["-"] = Gosu::Image.new @wnd, "media/images/wall-2.png", true    #   -
-    @tile_images[">"] = Gosu::Image.new @wnd, "media/images/wall-3.png", true    #   >
-    @tile_images["<"] = Gosu::Image.new @wnd, "media/images/wall-4.png", true    #   <
-    @tile_images["}"] = Gosu::Image.new @wnd, "media/images/wall-5.png", true    #   <
-    @tile_images["{"] = Gosu::Image.new @wnd, "media/images/wall-6.png", true    #   <
+    @tile_images["|"] = Gosu::Image.new @wnd, "media/images/wall-1.png", true   
+    @tile_images["-"] = Gosu::Image.new @wnd, "media/images/wall-2.png", true   
+    @tile_images[">"] = Gosu::Image.new @wnd, "media/images/wall-3.png", true   
+    @tile_images["<"] = Gosu::Image.new @wnd, "media/images/wall-4.png", true   
+    @tile_images["}"] = Gosu::Image.new @wnd, "media/images/wall-5.png", true   
+    @tile_images["{"] = Gosu::Image.new @wnd, "media/images/wall-6.png", true   
+    @tile_images["^"] = Gosu::Image.new @wnd, "media/images/wall-7.png", true   
+    @tile_images["v"] = Gosu::Image.new @wnd, "media/images/wall-8.png", true   
+    
 
     @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
 #    @tile_images["@"] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
@@ -245,11 +248,10 @@ class GameState
   end
   
   
-  def background_collision?(entity, do_dump = false)
+  def background_collision?(entity)
     coords = screen_to_map(entity.coords)
     tiles = @core.possible_collisions(coords)
     box = entity.box
-    puts tiles.inspect if do_dump
     tiles.each do |tile|
       return true if test_boxes_for_intersect(bounding_box_for_tile(tile), box )
     end

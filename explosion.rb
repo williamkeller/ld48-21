@@ -16,7 +16,6 @@ class ExplosionManager
     @explosions.each do |ex|
       if ex.finished?
         @explosions.delete ex
-        puts "dumping explosion"
       else
         ex.update
       end
