@@ -10,7 +10,32 @@ ANGLE_NOISE = 40
 ANGLE_NOISE_2 = (ANGLE_NOISE / 2)
 
 
+class DaemonManager
+  
+  def initialize
+    @daemons = Array.new
+  end
+  
+  
+  def update
+    
+  end
+  
+  
+  def draw
+    
+  end
+  
+  
+  def spawn(x, y)
+    
+  end
+end
+
+
 class Daemon
+  attr_accessor :x, :y
+  
   @@images = Array.new
   
   def self.images
@@ -30,6 +55,16 @@ class Daemon
     @x = pos[0]
     @y = pos[1]
     @tail = Array.new(TAIL_LENGTH) { [@x, @y] }
+  end
+  
+  
+  def coords
+    [@x, @y]
+  end
+  
+  
+  def box
+    [@x - 16, @y - 16, @x + 16, @y + 16]
   end
   
   

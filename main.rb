@@ -88,9 +88,19 @@ class GameWindow < Gosu::Window
     end
     
     @player.update
-    test_for_collision_with_background(@player)
+    if background_collision? @player
+      @explosion_manager.spawn_explosion @player.x, @player.y
+    end
     
-    @daemons.each { |d| d.update }
+    @daemons.each do |d| 
+      if background_collision? d
+        @explosion_manager.spawn_explosion d.x, d.y
+        @daemons.delete d
+        puts "Dumping daemon, #{@daemons.length} remain"
+      else
+        d.update 
+      end
+    end
     
     @explosion_manager.update
 
@@ -183,18 +193,16 @@ class GameWindow < Gosu::Window
   # Get a list of possible tiles
   # Convert each possible tile into a bounding box
   # Test for collision with entity's bounding box
-  def test_for_collision_with_background(entity, do_dump = false)
+  def background_collision?(entity, do_dump = false)
     coords = screen_to_map(entity.coords)
     tiles = @core.possible_collisions(coords)
     box = entity.box
     puts tiles.inspect if do_dump
     tiles.each do |tile|
-      if test_boxes_for_intersect(bounding_box_for_tile(tile), box )
-        puts "Collision!  #{tile.inspect}, #{bounding_box_for_tile(tile).inspect}"
-        @explosion_manager.spawn_explosion @player.x, @player.y
-        break
-      end
+      return true if test_boxes_for_intersect(bounding_box_for_tile(tile), box )
     end
+    
+    false
   end
   
   
