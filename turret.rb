@@ -37,6 +37,11 @@ class Bullet
   def finished?
     @life == -1
   end
+  
+  def box
+    [@x - 4, @y - 4, @x + 4, @y + 4]
+  end
+  
 end
 
 
@@ -84,6 +89,4 @@ class Turret
       Bullet.new @x + 16, @y + 16, move_x, move_y
     end
   end
-  
-  
 end

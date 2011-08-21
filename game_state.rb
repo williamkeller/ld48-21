@@ -164,6 +164,10 @@ class GameState
       b.update
       if b.finished?
         @bullets.delete b
+      elsif test_boxes_for_intersect b.box, @player.box
+        kill_player @player.x, @player.y
+        @bullets.delete b
+        $sounds.queue_sound :explosion
       end
     end
     
