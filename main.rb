@@ -56,6 +56,7 @@ class GameWindow < Gosu::Window
 end
 
 
+
 def main
   window = GameWindow.new
   window.show

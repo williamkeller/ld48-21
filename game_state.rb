@@ -27,6 +27,11 @@ class GameState
     @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
     @scroll_offset = 0
     
+    @p1_offset = 0
+    @p1_delay = 0
+    @p2_offset = 0
+    @p2_delay = 0
+    
     
     #Player
     Player.images << Gosu::Image.new(@wnd, "media/images/blip.png", true)
@@ -83,6 +88,17 @@ class GameState
     if @scroll_offset == 0
       @core.advance
     end
+    
+    @p1_delay = (@p1_delay + 1) % 2
+    if @p1_delay == 0
+      @p1_offset = (@p1_offset + 1) % 64
+    end
+
+    @p2_delay = (@p2_delay + 1) % 3
+    if @p2_delay == 0
+      @p2_offset = (@p2_offset + 1) % 32
+    end
+
     
     @chase_counter = (@chase_counter + 1) % CHASE_INTERVAL
     if @chase_counter == 0
@@ -146,6 +162,21 @@ class GameState
     
     @debug_font.draw "Backups: #{@player.backups}", 500, 460, 2
     @debug_font.draw "[#{@core.current_position}]", 500, 20, 2
+    
+    
+    # Parallax level 1
+    (0..8).each do |x|
+      (-1..8).each do |y|
+        @grid.draw x * 64 + X_BORDER, y * 64 + @p1_offset, 0, 2.0, 2.0, 0x5fffffff
+      end
+    end
+    
+    # Parallax level 2
+    (0..18).each do |x|
+      (-1..20).each do |y|
+        @grid.draw x * 32 + X_BORDER, y * 32 + @p2_offset, 0, 1.0, 1.0, 0x3fffffff
+      end
+    end
     
   end
   
