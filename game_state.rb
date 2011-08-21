@@ -113,6 +113,7 @@ class GameState
       @player.update
       if background_collision? @player
         kill_player @player.x, @player.y
+        $sounds.queue_sound :player
       end
     elsif @player_state == DYING
       @player_timer += 1
@@ -126,6 +127,7 @@ class GameState
       d.update
       if background_collision? d
         $explosions.spawn_explosion d.x, d.y
+        $sounds.queue_sound :explosion
         
         @daemons.delete d
       elsif test_boxes_for_intersect d.box, @player.box

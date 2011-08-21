@@ -5,12 +5,19 @@ require "gosu"
 require "constants"
 require "menu_state"
 require "game_state"
+require "music_manager"
+require "sound_manager"
 
 class GameWindow < Gosu::Window
   
   def initialize
     super SCREEN_X, SCREEN_Y, false
     self.caption = "Escape deletion"
+
+    $music = MusicManager.new(self)
+    $music.songs[:menu] = Gosu::Song.new(self, "media/music/menu.ogg")
+    $sounds = SoundManager.new(self)
+    
     
     @states = Hash.new
     
@@ -30,6 +37,7 @@ class GameWindow < Gosu::Window
     @current_state = @states[:menu]
     
     @paused = false
+    @current_state.start
   end
   
   

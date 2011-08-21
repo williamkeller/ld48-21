@@ -5,6 +5,11 @@ class MenuState
     @font = Gosu::Font.new @wnd, "Courier", 40
   end
   
+  
+  def start
+    $music.play :menu
+  end
+  
 
   def update
     if @wnd.button_down? Gosu::KbS
@@ -20,5 +25,6 @@ class MenuState
   
   def when_start(&handler)
     @start_handler = handler
+    $music.stop
   end
 end
