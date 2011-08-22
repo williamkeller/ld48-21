@@ -169,7 +169,7 @@ class GameState
     
     @bullets.each do |b|
       b.update
-      if b.finished?
+      if b.finished? 
         @bullets.delete b
       elsif background_collision? b
         @bullets.delete b
@@ -327,11 +327,13 @@ class GameState
     end
     
     @core.when_end_of_level do
+      puts "End of level"
       @current_map += 1
       if @current_map == @maps.length
         puts "You win!"
       else
         load_core @maps[@current_map]
+        reset_core
       end
     end
     
@@ -339,5 +341,4 @@ class GameState
       puts "Message received - #{msg}"
     end
   end
-  
 end

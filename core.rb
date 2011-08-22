@@ -77,14 +77,18 @@ class Core
   # Returns a collection of possible collisions, based on a one
   # tile border around the provided coords
   def possible_collisions(coords)
-    left_edge = (coords[0] == 0) ? 0 : coords[0] - 1
+    left_edge = (coords[0] <= 0) ? 0 : coords[0] - 1
     right_edge = (coords[0] >= MAP_WIDTH) ? MAP_WIDTH : coords[0] + 1
+    bottom_edge = (coords[1] >= @rows.length - 2) ? @rows.length - 2 : coords[1]
     tiles = Array.new
     
     (-1..1).each do |row_index|
-      row = @rows[coords[1] + row_index]
+      crow = @rows[bottom_edge + row_index]
       (left_edge..right_edge).each do |col|
-        tiles << [col, coords[1] + row_index] if "|-<>{}[]^v@".index row[col]
+        raise "Yikes: #{coords.inspect}, rows = #{@rows.length}" if crow.nil?
+        if "|-<>{}[]^v@".index crow[col]
+          tiles << [col, coords[1] + row_index] 
+        end
       end
     end
     tiles
