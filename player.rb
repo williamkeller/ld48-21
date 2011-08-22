@@ -15,7 +15,7 @@ class Player
     @wnd = window
     @x = 0
     @y = 0
-    @backups = 2
+    @backups = 3
     
     @angle = 0
     @trail = Array.new(8) { [0, 0] }
@@ -58,11 +58,7 @@ class Player
   
   
   def draw
-#    @@images[0].draw @x - 16, @y - 16, 1    
     @@images[0].draw_rot @x - 16, @y - 16, 1, @angle
-    
-#    coords = @trail[(@trail_index + 7) % 8]
-#    @@images[0].draw coords[0] - 16, coords[1] - 16, 1
   end
   
   

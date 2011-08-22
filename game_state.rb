@@ -38,7 +38,6 @@ class GameState
     @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
 
     @grid = Gosu::Image.new @wnd, "media/images/grid.png", true
-#    @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
     @scroll_offset = 0
     
     @p1_offset = 0
@@ -94,7 +93,7 @@ class GameState
     end
     
     if @player_state == DEAD
-      if @wnd.button_down? Gosu::KbR
+      if @wnd.button_down? Gosu::KbSpace
         if @player.backups == 0
           @game_over_handler.call
           return
@@ -140,6 +139,7 @@ class GameState
       @player_timer += 1
       if @player_timer == 100
         @player_state = DEAD
+        @player.backups -= 1
       end
     end
     
@@ -289,6 +289,7 @@ class GameState
     $explosions.spawn_explosion(x, y)
   end
   
+
   def reset_core
     @core.reset
     @daemons.clear
@@ -301,6 +302,7 @@ class GameState
     @load_screen_delay = 0
     $sounds.queue_sound :loading
   end
+  
   
   def load_core(name)
     @core = Core.new

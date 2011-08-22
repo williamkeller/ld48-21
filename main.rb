@@ -3,7 +3,6 @@ $LOAD_PATH << "."
 require "rubygems"
 require "gosu"
 require "constants"
-require "console_state"
 require "menu_state"
 require "game_state"
 require "music_manager"
@@ -22,13 +21,6 @@ class GameWindow < Gosu::Window
     
     @states = Hash.new
     
-    state = ConsoleState.new(self, "intro.txt")
-    state.when_start do
-      @current_state = @states[:game]
-      @current_state.start
-    end
-    @states[:intro] = state
-    
     state = MenuState.new(self)
     state.when_start do
       @current_state = @states[:game]
@@ -38,7 +30,6 @@ class GameWindow < Gosu::Window
     
     state = GameState.new(self)
     state.when_game_over do
-      puts "Game over detected"
       close
     end
     @states[:game] = state
@@ -63,13 +54,7 @@ class GameWindow < Gosu::Window
   def button_down(key_id)
     close if key_id == Gosu::KbEscape
     
-    pause if key_id == Gosu::KbSpace
-
-    dump if key_id == Gosu::KbD
-    
-    if key_id == Gosu::KbE
-      @explosion_manager.spawn_explosion @player.x, @player.y
-    end
+    pause if key_id == Gosu::KbP
   end
   
   
