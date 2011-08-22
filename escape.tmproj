@@ -2,45 +2,55 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>game_state.rb</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>daemon.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T14:15:43Z</date>
+			<date>2011-08-21T23:43:05Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>todo.txt</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:45:18Z</date>
+			<date>2011-08-21T23:43:06Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>player.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:54:40Z</date>
+			<date>2011-08-22T16:09:00Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>maps/core1.txt</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:38:32Z</date>
+			<date>2011-08-22T16:08:59Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>consoles/intro.txt</string>
+			<key>lastUsed</key>
+			<date>2011-08-22T01:34:00Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>console_state.rb</string>
+			<key>lastUsed</key>
+			<date>2011-08-22T01:39:20Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>core.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:17:34Z</date>
+			<date>2011-08-22T00:51:11Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>explosion.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:54:41Z</date>
+			<date>2011-08-21T23:43:06Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -50,15 +60,21 @@
 		</dict>
 		<dict>
 			<key>filename</key>
+			<string>turret.rb</string>
+			<key>lastUsed</key>
+			<date>2011-08-22T00:51:10Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
 			<string>menu_state.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:38:33Z</date>
+			<date>2011-08-21T19:53:50Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>game_state.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:57:35Z</date>
+			<date>2011-08-22T16:09:01Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -66,113 +82,31 @@
 			<key>filename</key>
 			<string>constants.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T14:24:28Z</date>
+			<date>2011-08-21T20:34:59Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>sound_manager.rb</string>
+			<key>lastUsed</key>
+			<date>2011-08-21T23:43:05Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>music_manager.rb</string>
+			<key>lastUsed</key>
+			<date>2011-08-21T19:53:48Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>main.rb</string>
 			<key>lastUsed</key>
-			<date>2011-08-21T17:57:35Z</date>
+			<date>2011-08-22T16:08:58Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>288</integer>
 	<key>metaData</key>
-	<dict>
-		<key>core.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>20</integer>
-				<key>line</key>
-				<integer>66</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>19</integer>
-		</dict>
-		<key>explosion.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>11</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>1</integer>
-		</dict>
-		<key>game_state.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>27</integer>
-				<key>line</key>
-				<integer>22</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>main.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>33</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>maps/core1.txt</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>menu_state.rb</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>13</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>main.rb</string>
-		<string>game_state.rb</string>
-		<string>explosion.rb</string>
-		<string>core.rb</string>
-		<string>maps/core1.txt</string>
-		<string>menu_state.rb</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
 	<key>windowFrame</key>

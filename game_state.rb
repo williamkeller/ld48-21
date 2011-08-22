@@ -1,8 +1,3 @@
-require "daemon"
-require "turret"
-require "player"
-require "core"
-require "explosion"
 
 class GameState
 
