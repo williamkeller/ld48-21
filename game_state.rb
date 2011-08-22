@@ -322,10 +322,10 @@ class GameState
     end
     
     @core.when_end_of_level do
-      puts "End of level"
+#      puts "End of level"
       @current_map += 1
       if @current_map == @maps.length
-        puts "You win!"
+#        puts "You win!"
         close
       else
         load_core @maps[@current_map]
@@ -334,7 +334,7 @@ class GameState
     end
     
     @core.message_at do |col, msg|
-      puts "Message received - #{msg}"
+      # puts "Message received - #{msg}"
     end
   end
 end
