@@ -35,12 +35,10 @@ class GameState
     @tile_images["7"] = Gosu::Image.new @wnd, "media/images/wall-11.png", true   
     @tile_images["L"] = Gosu::Image.new @wnd, "media/images/wall-12.png", true   
     
-
     @tile_images["="] = Gosu::Image.new @wnd, "media/images/eol.png", true     #   =
-#    @tile_images["@"] = Gosu::Image.new @wnd, "media/images/bomb.png", true    #   @
 
     @grid = Gosu::Image.new @wnd, "media/images/grid.png", true
-    @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
+#    @blit = Gosu::Image.new @wnd, "media/images/blip.png", true
     @scroll_offset = 0
     
     @p1_offset = 0
@@ -75,7 +73,7 @@ class GameState
     
     @chase_counter = 0
     
-    @maps = ["core1.txt", "core2.txt"]
+    @maps = ["core1.txt", "core2.txt", "core3.txt", "core4.txt", "core5.txt"]
     @current_map = 0
   end
   
@@ -189,7 +187,7 @@ class GameState
   def draw
     
     if @player_state == LOADING
-      @fonts[:title].draw "Loading core 01", 200, 200, 1
+      @fonts[:title].draw "Loading #{@map_name}", 200, 200, 1
       @fonts[:normal].draw "communication established", 200, 240, 1
       return
     end
@@ -227,8 +225,6 @@ class GameState
     @bullets.each { |b| b.draw }
     
     @debug_font.draw "Backups: #{@player.backups}", 500, 460, 2
-    @debug_font.draw "[#{@core.current_position}]", 500, 20, 2
-    
     
     # Parallax level 1
     (0..8).each do |x|
@@ -309,7 +305,7 @@ class GameState
   def load_core(name)
     @core = Core.new
     @core.load name
-    
+    @map_name = name.gsub(/\.txt/, "").upcase
 
     @core.spawn_at do |col, what| 
       case what
@@ -331,6 +327,7 @@ class GameState
       @current_map += 1
       if @current_map == @maps.length
         puts "You win!"
+        close
       else
         load_core @maps[@current_map]
         reset_core

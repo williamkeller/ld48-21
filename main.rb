@@ -3,6 +3,7 @@ $LOAD_PATH << "."
 require "rubygems"
 require "gosu"
 require "constants"
+require "console_state"
 require "menu_state"
 require "game_state"
 require "music_manager"
@@ -21,6 +22,13 @@ class GameWindow < Gosu::Window
     
     @states = Hash.new
     
+    state = ConsoleState.new(self, "intro.txt")
+    state.when_start do
+      @current_state = @states[:game]
+      @current_state.start
+    end
+    @states[:intro] = state
+    
     state = MenuState.new(self)
     state.when_start do
       @current_state = @states[:game]
@@ -35,7 +43,7 @@ class GameWindow < Gosu::Window
     end
     @states[:game] = state
 
-    @current_state = @states[:menu]
+    @current_state = @states[:game]
     
     @paused = false
     @current_state.start

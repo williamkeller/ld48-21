@@ -1,0 +1,16 @@
+BTES Sentient Shell v37.04
+
+$ {typed} whoami
+process id 2342 document finder  
+
+$ {typed} ls -payload
+nuke-launch-docs.txt       
+world-dom.plan.txt
+gs-cookie-recipes.txt
+
+>> INCOMING MESSAGE
+Looks like you've got some pretty important info there.
+Your only hope of getting off the grid is to avoid the search agents
+and code debuggers. Run, program!
+
+
