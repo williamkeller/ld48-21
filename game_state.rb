@@ -201,7 +201,9 @@ class GameState
       y = (row_index * 32) + Y_BORDER + @scroll_offset
       (0..TILES_X).each do |col_index|
         x = (col_index * 32) + X_BORDER
-        img = @tile_images[row[col_index]]
+        char = row[col_index]
+        char = char.chr unless char.nil?
+        img = @tile_images[char]
 
         unless img.nil?
           img.draw x, y, 1
