@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift File.dirname(__FILE__)
+self$LOAD_PATH.unshift File.dirname(__FILE__)
 
 require "rubygems"
 require "gosu"
